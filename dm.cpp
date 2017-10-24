@@ -2,24 +2,26 @@
 #include <iostream>
 #include <stdio.h>
 
-std::ofstream oStream;
+using namespace std;
+
+ofstream oStream;
 
 int main(int argc, const char* argv[])
 {
     if (argc != 3)
     {
-        std::cout << "Parametros incorrectos!" << std::endl;
-        std::cout << "Se esperaba: ejecutable.exe \"archivo_entrada\" \"archivo_log\"" << std::endl;
+        cout << "Parametros incorrectos!" << endl;
+        cout << "Se esperaba: ejecutable.exe \"archivo_entrada\" \"archivo_log\"" << endl;
         return 0;
     }
     else
     {
         int registros, i, j;
-        std::string results, line, logLine;
-        std::ifstream iStream;
+        string results, line, logLine;
+        ifstream iStream;
 
         // Abrir para lectura
-        iStream.open(argv[1], std::ios::in);
+        iStream.open(argv[1], ios::in);
 
         // Cuenta de registros
         registros = 0;
@@ -31,20 +33,20 @@ int main(int argc, const char* argv[])
         }
         iStream.close();
 
-        iStream.open(argv[1], std::ios::in);
+        iStream.open(argv[1], ios::in);
 
-        std::string segID[registros];
-        std::string paths[registros];
+        string segID[registros];
+        string paths[registros];
 
         for(i = 0; i < registros; i++)
         {
             getline(iStream, line);
             segID[i] = line.substr(0, 19);
-            paths[i] = line.substr(20, std::string::npos);
+            paths[i] = line.substr(20, string::npos);
         }
         iStream.close();
 
-        oStream.open(argv[2], std::ios::app);
+        oStream.open(argv[2], ios::app);
 
         results = "";
         for(i = 1; i < registros; i++)

@@ -1,67 +1,71 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <stdio.h>
 
-void escribir(std::string, const char*);
+std::ofstream oStream;
 
 int main(int argc, const char* argv[])
 {
     if (argc != 3)
     {
         std::cout << "Parametros incorrectos!" << std::endl;
-        std::cout << "Se esperaba: ejecutable.exe \"archivo_entrada\" \"archivo_salida\"" << std::endl;
+        std::cout << "Se esperaba: ejecutable.exe \"archivo_entrada\" \"archivo_log\"" << std::endl;
         return 0;
     }
     else
     {
-        int registros = 0, i, j;
-        std::string resultados = "pause\n\n";
+        int registros, i, j;
+        std::string results, line, logLine;
+        std::ifstream iStream;
 
-        std::string linea;
-        std::ifstream doc;
-        doc.open(argv[1], std::ios::in);
+        // Abrir para lectura
+        iStream.open(argv[1], std::ios::in);
 
         // Cuenta de registros
-        while(!doc.eof())
+        registros = 0;
+        while(!iStream.eof())
         {
-            getline(doc, linea);
-            if (linea.length() > 0)
+            getline(iStream, line);
+            if (line.length() > 0)
                 registros++;
         }
+        iStream.close();
 
-        doc.close();
-        doc.open(argv[1], std::ios::in);
+        iStream.open(argv[1], std::ios::in);
 
         std::string segID[registros];
-        std::string rutas[registros];
+        std::string paths[registros];
 
         for(i = 0; i < registros; i++)
         {
-            getline(doc, linea);
-            segID[i] = linea.substr(0, 19);
-            rutas[i] = linea.substr(20, std::string::npos);
+            getline(iStream, line);
+            segID[i] = line.substr(0, 19);
+            paths[i] = line.substr(20, std::string::npos);
         }
-        doc.close();
+        iStream.close();
 
+        oStream.open(argv[2], std::ios::app);
+
+        results = "";
         for(i = 1; i < registros; i++)
             for(j = i - 1; j < i; j++)
                 if(segID[i] == segID[j])
                 {
-                    resultados.append("del ");
-                    resultados.append(rutas[i]);
-                    resultados.append("\n");
+                    logLine = "";
+
+                    if(remove(paths[i].c_str()) == 0)
+                        logLine.append("Eliminado    -> ");
+                    else
+                        logLine.append("No eliminado -> ");
+
+                    logLine.append(paths[i]);
+                    logLine.append("\n");
+
+                    oStream << logLine;
                 }
 
-        escribir(resultados, argv[2]);
+        oStream.close();
 
         return 1;
     }
-}
-
-void escribir(std::string datos, const char* fileName)
-{
-    std::ofstream salida;
-    salida.open(fileName, std::ios::out);
-
-    salida << datos;
-    salida.close();
 }

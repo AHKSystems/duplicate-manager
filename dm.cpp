@@ -10,7 +10,9 @@
 using namespace std;
 
 // Declaración de funciones
-int programa(const string, const string, const bool, const bool);
+/*int programa(const string, const string, const bool, const bool);*/
+int batch(const string, const string);
+int borrado(const string, const string, const bool);
 bool directoryExists(const string);
 bool dirCheck(const string&);
 const string getDateTime();
@@ -68,7 +70,7 @@ int main(int argc, const char* argv[])
             else
                 goto falla;
 
-            programa(f_input.c_str(), f_batch.c_str(), false, true);
+            batch(f_input, f_batch);
             break;
         case 4:
         /*
@@ -90,7 +92,7 @@ int main(int argc, const char* argv[])
             else
                 goto falla;
             
-            programa(f_input.c_str(), "", true, false);
+            borrado(f_input, "", false);
             break;
         case 6:
         /*
@@ -136,7 +138,7 @@ int main(int argc, const char* argv[])
             else
                 goto falla;
 
-            programa(f_input.c_str(), f_log.c_str(), true, true);
+            borrado(f_input, f_log, true);
             break;
 falla:
         default:
@@ -150,11 +152,11 @@ falla:
     return 1;
 }
 
-int programa(const string input_file, const string output_file, const bool del, const bool isOut)
+int borrado(const string input_file, const string output_file, const bool isOut)
 {
-    int registros, i, j;
+    int regCount, i, j;
     bool writeOut;
-    string results, in_line, out_line;
+    string inLine, outLine;
     ifstream iStream;
     ofstream oStream;
 
@@ -173,52 +175,109 @@ int programa(const string input_file, const string output_file, const bool del, 
     iStream.open(input_file.c_str(), ios::in);
 
     // Cuenta de registros
-    registros = 0;
+    regCount = 0;
     while (!iStream.eof())
     {
-        getline(iStream, in_line);
-        if (in_line.length() > 0)
-            registros++;
+        getline(iStream, inLine);
+        if (inLine.length() > 0)
+            regCount++;
     }
     iStream.close();
 
     iStream.open(input_file.c_str(), ios::in);
 
-    string segID[registros];
-    string paths[registros];
+    string segID[regCount];
+    string paths[regCount];
 
-    for (i = 0; i < registros; i++)
+    for (i = 0; i < regCount; i++)
     {
-        getline(iStream, in_line);
-        segID[i] = in_line.substr(0, 19);
-        paths[i] = in_line.substr(20, string::npos);
+        getline(iStream, inLine);
+        segID[i] = inLine.substr(0, 19);
+        paths[i] = inLine.substr(20, string::npos);
     }
     iStream.close();
 
     if (writeOut)
         oStream.open(output_file.c_str(), ios::app);
 
-    results = "";
-    for (i = 1; i < registros; i++)
+    for (i = 1; i < regCount; i++)
         for (j = i - 1; j < i; j++)
             if (segID[i] == segID[j])
             {
-                out_line.assign(getDateTime());
+                outLine.assign(getDateTime());
 
                 if (remove(paths[i].c_str()) == 0)
-                    out_line.append("Eliminado    -> ");
+                    outLine.append("  Eliminado    -> ");
                 else
-                    out_line.append("No eliminado -> ");
+                    outLine.append("  No eliminado -> ");
 
-                out_line.append(paths[i]);
-                out_line.append("\n");
+                outLine.append(paths[i]);
+                outLine.append("\n");
 
                 if (writeOut)
-                    oStream << out_line;
+                    oStream << outLine;
             }
 
     if (writeOut)
         oStream.close();
+
+    return 1;
+}
+
+int batch(const string input_file, const string output_file)
+{
+    int regCount, i, j;
+    string inLine, outLine;
+    ifstream iStream;
+    ofstream oStream;
+
+    // Revisa si existe el directorio de salida
+    if (!directoryExists(output_file))
+    {
+        cout << "No se encontró el directorio del archivo de salida especificado" << endl;
+        return 15;
+    }
+
+    // Abrir para lectura
+    iStream.open(input_file.c_str(), ios::in);
+
+    // Cuenta de registros
+    regCount = 0;
+    while (!iStream.eof())
+    {
+        getline(iStream, inLine);
+        if (inLine.length() > 0)
+            regCount++;
+    }
+    iStream.close();
+
+    iStream.open(input_file.c_str(), ios::in);
+
+    string segID[regCount];
+    string paths[regCount];
+
+    for (i = 0; i < regCount; i++)
+    {
+        getline(iStream, inLine);
+        segID[i] = inLine.substr(0, 19);
+        paths[i] = inLine.substr(20, string::npos);
+    }
+    iStream.close();
+
+    oStream.open(output_file.c_str(), ios::app);
+    oStream << "pause\n" << endl;
+
+    for (i = 1; i < regCount; i++)
+        for (j = i - 1; j < i; j++)
+            if (segID[i] == segID[j])
+            {
+                outLine = "del \"";
+                outLine.append(paths[i]);
+                outLine.append("\"");
+
+                oStream << outLine << endl;
+            }
+    oStream.close();
 
     return 1;
 }

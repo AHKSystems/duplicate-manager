@@ -162,7 +162,7 @@ int borrado(const string input_file, const string output_file, const bool isOut)
         writeOut = true;
     else if (isOut && !directoryExists(output_file))
     {
-        cout << "No se encontró el directorio del archivo de salida especificado" << endl;
+        cout << "No se encontro el directorio del archivo de salida especificado" << endl;
         return 15;
     }
     else
@@ -231,7 +231,7 @@ int batch(const string input_file, const string output_file)
     // Revisa si existe el directorio de salida
     if (!directoryExists(output_file))
     {
-        cout << "No se encontró el directorio del archivo de salida especificado" << endl;
+        cout << "No se encontro el directorio del archivo de salida especificado" << endl;
         return 15;
     }
 

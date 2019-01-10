@@ -1,3 +1,7 @@
+/*
+ * Duplicate Manager
+ */
+
 #include <cstdio>
 #include <cstring>
 #include <ctime>
@@ -16,12 +20,12 @@ bool directoryExists(const string);
 bool dirCheck(const string&);
 const string getDateTime();
 
-// Variables globales 
+// Variables globales
 
 /*
  * Sintaxis
  * dm /i input_file [/b batch_file | /d [/l log_file]]
- * 
+ *
  * Escenarios
  * dm /h
  * dm /i file /b file
@@ -89,7 +93,7 @@ int main(int argc, const char* argv[])
             }
             else
                 goto falla;
-            
+
             return borrado(f_input, "", false);
         case 6:
         /*

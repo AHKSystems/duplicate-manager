@@ -2,7 +2,6 @@
  * Duplicate Manager (dupman)
  */
 
-//#include <cstdio>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -24,12 +23,8 @@ using std::endl;
  */
 int main(int argc, char** argv)
 {
-    // Flags
-    /*bool f_h = false,
-        f_i = false,
-        f_b = false,
-        f_d = false,
-        f_l = false;*/
+    int executionResult;
+
     string f_input, f_batch, f_log;
 
     // Selección de parámetros
@@ -40,36 +35,30 @@ int main(int argc, char** argv)
          * Escenario:
          *   dm /h
          */
-            // ayuda();
-            goto falla;
-            break;
+            if (strcmp(argv[1], "/h") == 0)
+            {
+                // ayuda();
+                // break;
+            }
         case 5:
         /*
          * Creación de batch
-         * Escenarios:
+         * Escenario:
          *   dm /i file /b file
-         *   dm /b file /i file
          */
-            if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 && strcmp(argv[3], "/b") == 0 && strlen(argv[4]) > 2)
+            if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&
+                strcmp(argv[3], "/b") == 0 && strlen(argv[4]) > 2)
             {
                 /*f_i = true; f_b = true;*/
                 f_input.assign(argv[2]); f_batch.assign(argv[4]);
+                
+                executionResult = write_batch_file(f_input, f_batch);
             }
-            else if (strcmp(argv[1], "/b") == 0 && strlen(argv[2]) > 2 && strcmp(argv[3], "/i") == 0 && strlen(argv[4]) > 2)
-            {
-                /*f_i = true; f_b = true;*/
-                f_input.assign(argv[4]); f_batch.assign(argv[2]);
-            }
-            else
-                goto falla;
-
-            return write_batch_file(f_input, f_batch);
         case 4:
         /*
          * Eliminación sin logs
-         * Escenarios:
+         * Escenario:
          *   dm /i file /d
-         *   dm /d /i file
          */
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 && strcmp(argv[3], "/d") == 0)
             {
@@ -84,17 +73,12 @@ int main(int argc, char** argv)
             else
                 goto falla;
 
-            return remove_files(f_input, "", false);
+            executionResult = remove_files(f_input, "", false);
         case 6:
         /*
          * Eliminación con logs
-         * Escenarios:
+         * Escenario:
          *   dm /i file /d /l file
-         *   dm /i file /l file /d
-         *   dm /d /i file /l file
-         *   dm /d /l file /i file
-         *   dm /l file /d /i file
-         *   dm /l file /i file /d
          */
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 && strcmp(argv[3], "/d") == 0 && strcmp(argv[4], "/l") == 0 && strlen(argv[5]) > 2)
             {
@@ -129,7 +113,7 @@ int main(int argc, char** argv)
             else
                 goto falla;
 
-            return remove_files(f_input, f_log, true);
+            executionResult = remove_files(f_input, f_log, true);
 
 falla:
         default:

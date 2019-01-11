@@ -13,6 +13,23 @@ using std::string;
 using std::cout;
 using std::endl;
 
+unsigned int get_file_numlines(string& filename)
+{
+    ifstream ifs(filename, ios::in);
+    unsigned int reg_count = 0;
+
+    while (!ifs.eof())
+    {
+        string buffer;
+        getline(ifs, buffer);
+        if (buffer.length() > 0)
+            reg_count++;
+    }
+    ifs.close();
+
+    return reg_count;
+}
+
 int remove_files(string input_file, string output_file, bool generate_log)
 {
     int regCount;
@@ -34,24 +51,12 @@ int remove_files(string input_file, string output_file, bool generate_log)
     else
         writeOut = false;
 
-    // Abrir para lectura
-    iStream.open(input_file.c_str(), ios::in);
-
-    // Cuenta de registros
-    regCount = 0;
-    while (!iStream.eof())
-    {
-        string buffer;
-        getline(iStream, buffer);
-        if (buffer.length() > 0)
-            regCount++;
-    }
-    iStream.close();
+    regCount = get_file_numlines(input_file);
 
     string segID[regCount];
     string paths[regCount];
 
-    iStream.open(input_file.c_str(), ios::in);
+    iStream.open(input_file, ios::in);
 
     for (int i = 0; i < regCount; i++)
     {
@@ -63,7 +68,7 @@ int remove_files(string input_file, string output_file, bool generate_log)
     iStream.close();
 
     if (writeOut)
-        oStream.open(output_file.c_str(), ios::app);
+        oStream.open(output_file, ios::app);
 
     for (int i = 1; i < regCount; i++)
         for (int j = i - 1; j < i; j++)
@@ -102,24 +107,12 @@ int write_batch_file(string input_file, string output_file)
         return 15;
     }
 
-    // Abrir para lectura
-    iStream.open(input_file.c_str(), ios::in);
-
-    // Cuenta de registros
-    regCount = 0;
-    while (!iStream.eof())
-    {
-        string buffer;
-        getline(iStream, buffer);
-        if (buffer.length() > 0)
-            regCount++;
-    }
-    iStream.close();
-
-    iStream.open(input_file.c_str(), ios::in);
+    regCount = get_file_numlines(input_file);
 
     string segID[regCount];
     string paths[regCount];
+
+    iStream.open(input_file, ios::in);
 
     for (int i = 0; i < regCount; i++)
     {
@@ -130,7 +123,7 @@ int write_batch_file(string input_file, string output_file)
     }
     iStream.close();
 
-    oStream.open(output_file.c_str(), ios::app);
+    oStream.open(output_file, ios::app);
     oStream << "pause\n" << endl;
 
     for (int i = 1; i < regCount; i++)

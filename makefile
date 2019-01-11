@@ -4,11 +4,12 @@ CPPFLAGS=-std=c++17
 LDFLAGS=
 LDLIBS=
 
+OBJS=date.o fs.o output.o dupman.o
 
 all: dupman
 
 dupman: dupman.o
-	$(CXX) $(LDFLAGS) date.o fs.o output.o dupman.o -o dupman.exe
+	$(CXX) $(LDFLAGS) $(OBJS) -o dupman.exe
 
 dupman.o: dupman.cpp output.o
 	$(CXX) $(CPPFLAGS) -c dupman.cpp
@@ -21,3 +22,9 @@ fs.o: fs.cpp fs.h date.o
 
 date.o: date.cpp date.h
 	$(CXX) $(CPPFLAGS) -c date.cpp
+
+clean:
+	$(RM) $(OBJS)
+
+distclean: clean
+	$(RM) dupman.exe

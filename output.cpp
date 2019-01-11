@@ -13,18 +13,20 @@ using std::string;
 using std::cout;
 using std::endl;
 
-int remove_files(string input_file, string output_file, bool isOut)
+int remove_files(string input_file, string output_file, bool generate_log)
 {
-    int regCount, i, j;
+    int regCount;
     bool writeOut;
-    string inLine, outLine;
     ifstream iStream;
     ofstream oStream;
 
+    const char* MSG_DELETED = "  Eliminado    -> ";
+    const char* MSG_NOT_DELETED = "  No eliminado -> ";
+
     // Revisa si existe el directorio de salida
-    if (isOut && directory_exists(output_file))
+    if (generate_log && directory_exists(output_file))
         writeOut = true;
-    else if (isOut && !directory_exists(output_file))
+    else if (generate_log && !directory_exists(output_file))
     {
         cout << "No se encontro el directorio del archivo de salida especificado" << endl;
         return 15;
@@ -39,44 +41,46 @@ int remove_files(string input_file, string output_file, bool isOut)
     regCount = 0;
     while (!iStream.eof())
     {
-        getline(iStream, inLine);
-        if (inLine.length() > 0)
+        string buffer;
+        getline(iStream, buffer);
+        if (buffer.length() > 0)
             regCount++;
     }
     iStream.close();
 
-    iStream.open(input_file.c_str(), ios::in);
-
     string segID[regCount];
     string paths[regCount];
 
-    for (i = 0; i < regCount; i++)
+    iStream.open(input_file.c_str(), ios::in);
+
+    for (int i = 0; i < regCount; i++)
     {
-        getline(iStream, inLine);
-        segID[i] = inLine.substr(0, 19);
-        paths[i] = inLine.substr(20, string::npos);
+        string buffer;
+        getline(iStream, buffer);
+        segID[i] = buffer.substr(0, 19);
+        paths[i] = buffer.substr(20, string::npos);
     }
     iStream.close();
 
     if (writeOut)
         oStream.open(output_file.c_str(), ios::app);
 
-    for (i = 1; i < regCount; i++)
-        for (j = i - 1; j < i; j++)
+    for (int i = 1; i < regCount; i++)
+        for (int j = i - 1; j < i; j++)
             if (segID[i] == segID[j])
             {
-                outLine.assign(get_datetime());
+                string bufferLog = get_datetime();
 
                 if (remove(paths[i].c_str()) == 0)
-                    outLine.append("  Eliminado    -> ");
+                    bufferLog.append(MSG_DELETED);
                 else
-                    outLine.append("  No eliminado -> ");
+                    bufferLog.append(MSG_NOT_DELETED);
 
-                outLine.append(paths[i]);
-                outLine.append("\n");
+                bufferLog.append(paths[i]);
+                bufferLog.append("\n");
 
                 if (writeOut)
-                    oStream << outLine;
+                    oStream << bufferLog;
             }
 
     if (writeOut)
@@ -87,8 +91,7 @@ int remove_files(string input_file, string output_file, bool isOut)
 
 int write_batch_file(string input_file, string output_file)
 {
-    int regCount, i, j;
-    string inLine, outLine;
+    int regCount;
     ifstream iStream;
     ofstream oStream;
 
@@ -106,8 +109,9 @@ int write_batch_file(string input_file, string output_file)
     regCount = 0;
     while (!iStream.eof())
     {
-        getline(iStream, inLine);
-        if (inLine.length() > 0)
+        string buffer;
+        getline(iStream, buffer);
+        if (buffer.length() > 0)
             regCount++;
     }
     iStream.close();
@@ -117,26 +121,28 @@ int write_batch_file(string input_file, string output_file)
     string segID[regCount];
     string paths[regCount];
 
-    for (i = 0; i < regCount; i++)
+    for (int i = 0; i < regCount; i++)
     {
-        getline(iStream, inLine);
-        segID[i] = inLine.substr(0, 19);
-        paths[i] = inLine.substr(20, string::npos);
+        string buffer;
+        getline(iStream, buffer);
+        segID[i] = buffer.substr(0, 19);
+        paths[i] = buffer.substr(20, string::npos);
     }
     iStream.close();
 
     oStream.open(output_file.c_str(), ios::app);
     oStream << "pause\n" << endl;
 
-    for (i = 1; i < regCount; i++)
-        for (j = i - 1; j < i; j++)
+    for (int i = 1; i < regCount; i++)
+        for (int j = i - 1; j < i; j++)
             if (segID[i] == segID[j])
             {
-                outLine = "del \"";
-                outLine.append(paths[i]);
-                outLine.append("\"");
+                string line;
+                line = "del \"";
+                line.append(paths[i]);
+                line.append("\"");
 
-                oStream << outLine << endl;
+                oStream << line << endl;
             }
     oStream.close();
 

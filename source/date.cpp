@@ -12,7 +12,7 @@ std::string get_datetime()
 
         char buffer[20];
 
-        sprintf(buffer, "%04u-%02u-%02u %02u:%02u:%02u\0",
+        sprintf(buffer, "%04u-%02u-%02u %02u:%02u:%02u",
             1900 + ltm->tm_year, 1 + ltm->tm_mon,
             ltm->tm_mday, ltm->tm_hour,
             ltm->tm_min, ltm->tm_sec);

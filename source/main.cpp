@@ -1,5 +1,6 @@
 /*
  * Duplicate Manager (dupman)
+ *  Buscador de SegmentIDs duplicados
  */
 
 #include <cstring>
@@ -13,9 +14,9 @@ using std::endl;
 
 /*
  * Sintaxis
- * dupman /i input_file [/b batch_file | /d [/l log_file]]
+ * dupman /i input_file [ /b batch_file | /d [ /l log_file ] ]
  *
- * Escenarios
+ * Usos
  * dupman /h
  * dupman /i file /b file
  * dupman /i file /d
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
     {
         case 2:
         /*
-         * Escenario:
+         * Uso:
          *   dupman /h
          */
             if (strcmp(argv[1], "/h") == 0)
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
         case 5:
         /*
          * Creación de batch
-         * Escenario:
+         * Uso:
          *   dupman /i file /b file
          */
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
         case 4:
         /*
          * Eliminación sin logs
-         * Escenario:
+         * Uso:
          *   dupman /i file /d
          */
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&
@@ -88,7 +89,7 @@ int main(int argc, char** argv)
         case 6:
         /*
          * Eliminación con logs
-         * Escenario:
+         * Uso:
          *   dupman /i file /d /l file
          */
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&

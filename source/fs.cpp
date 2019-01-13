@@ -1,3 +1,4 @@
+#include <fstream>
 #include <string>
 #include <windows.h>
 #include "fs.h"
@@ -9,14 +10,17 @@ bool file_exists(string path)
     if (path == NULL || path.legth() == 0)
         return false;
 
-    ifstream f(path.c_str());
-    return f.good();
+    std::ifstream ifs(path.c_str());
+
+    return ifs.good();
 }
 
 bool directory_exists(string path)
 {
-    if (!filter_path(path))
+    if (path.length() == 0)
         return false;
+
+    filter_path(path, file_exists(path));
 
     DWORD dirAttr = GetFileAttributesA(path.c_str());
 
@@ -29,15 +33,11 @@ bool directory_exists(string path)
     return false;
 }
 
-bool filter_path(string& path)
+void filter_path(string& path, bool from_file)
 {
-    if (path.length() == 0)
-        return false;
-
     size_t backslash = path.find_last_of('\\');
 
-    if (path.length() - 1 == backslash)
+    if (from_file == true ||
+        path.length() - 1 == backslash)
         path = path.substr(0, backslash);
-
-    return true;
 }

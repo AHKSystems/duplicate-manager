@@ -16,8 +16,8 @@ private:
 public:
     output(std::string input_file, std::string output_file);
     ~output();
-    int write_batch_file() const;
-    int remove_files(bool generate_log) const;
+    int write_batch_file();
+    int remove_files(bool generate_log);
 
 };
 

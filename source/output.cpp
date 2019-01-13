@@ -15,8 +15,6 @@ using std::vector;
 
 output::output(string input_file, string output_file)
 {
-    if (!directory_exists(output_file))
-        throw 15;
     this->input_file = input_file;
     this->output_file = output_file;
 }
@@ -73,4 +71,9 @@ int output::write_batch_file()
     }
 
     return read_result;
+}
+
+int output::remove_files(bool generate_log)
+{
+    return 0;
 }

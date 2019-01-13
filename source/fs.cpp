@@ -2,23 +2,34 @@
 #include <windows.h>
 #include "fs.h"
 
-bool directory_exists(std::string path)
+using std::string;
+
+bool file_exists(string path)
+{
+    if (path == NULL || path.legth() == 0)
+        return false;
+
+    ifstream f(path.c_str());
+    return f.good();
+}
+
+bool directory_exists(string path)
 {
     if (!filter_path(path))
         return false;
 
-    DWORD fileAttr = GetFileAttributesA(path.c_str());
+    DWORD dirAttr = GetFileAttributesA(path.c_str());
 
-    if (fileAttr == INVALID_FILE_ATTRIBUTES)
+    if (dirAttr == INVALID_FILE_ATTRIBUTES)
         return false;
 
-    if (fileAttr & FILE_ATTRIBUTE_DIRECTORY)
+    if (dirAttr & FILE_ATTRIBUTE_DIRECTORY)
         return true;
 
     return false;
 }
 
-bool filter_path(std::string& path)
+bool filter_path(string& path)
 {
     if (path.length() == 0)
         return false;

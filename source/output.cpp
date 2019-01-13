@@ -57,7 +57,7 @@ int output::remove_files(bool generate_log)
 
         if (generate_log)
         {
-            ofstream ofs(output_file, ios::app)
+            ofstream ofs(output_file, ios::app);
             if (!ofs.is_open()) throw 12;
         }
 
@@ -80,7 +80,7 @@ int output::remove_files(bool generate_log)
 
         if (generate_log)
         {
-            ofstream ofs(output_file, ios::app)
+            ofstream ofs(output_file, ios::app);
 
             for (int i = 0; i < item_count; i++)
                 ofs << log[i] << endl;

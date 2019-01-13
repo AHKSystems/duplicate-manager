@@ -7,7 +7,7 @@ using std::string;
 
 bool file_exists(string path)
 {
-    if (path == NULL || path.legth() == 0)
+    if (path.length() == 0)
         return false;
 
     std::ifstream ifs(path.c_str());

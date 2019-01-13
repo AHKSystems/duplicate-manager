@@ -5,6 +5,6 @@
 
 bool file_exists(std::string path);
 bool directory_exists(std::string path);
-bool filter_path(std::string& path);
+void filter_path(std::string& path, bool from_file);
 
 #endif    // FS_H

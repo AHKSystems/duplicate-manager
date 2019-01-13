@@ -4,8 +4,21 @@
 #include <string>
 #include <vector>
 
-int get_lines(std::string filename, std::vector<std::string>& paths, std::vector<std::string>& segments);
-int remove_files(std::string input_file, std::string output_file, bool generate_log);
-int write_batch_file(std::string input_file, std::string output_file);
+class output
+{
+private:
+    std::string input_file;
+    std::string output_file;
+    std::vector<std::string> paths;
+    std::vector<std::string> segment_ids;
+    int get_lines();
+
+public:
+    output(std::string input_file, std::string output_file);
+    ~output();
+    int write_batch_file() const;
+    int remove_files(bool generate_log) const;
+
+};
 
 #endif    // OUTPUT_H

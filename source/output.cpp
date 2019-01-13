@@ -19,6 +19,7 @@ int write_batch_file(string input_file, string output_file)
     if (!directory_exists(output_file))
         throw 15;
 
+    vector<string> segment_ids;
     vector<string> paths;
 
     ifstream ifs(input_file, ios::in);
@@ -30,6 +31,7 @@ int write_batch_file(string input_file, string output_file)
         string buffer;
         getline(ifs, buffer);
 
+        segment_ids.push_back(buffer.substr(0, 19));
         paths.push_back(buffer.substr(20, string::npos));
     }
     ifs.close();
@@ -42,7 +44,7 @@ int write_batch_file(string input_file, string output_file)
 
     for (int i = 1; i < paths.size(); i++)
         for (int j = i - 1; j < i; j++)
-            if (segID[i] == segID[j])
+            if (segment_ids[i] == segment_ids[j])
             {
                 string line;
                 line.assign("del \"");

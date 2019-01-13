@@ -2,9 +2,7 @@
 #include <windows.h>
 #include "fs.h"
 
-using std::string;
-
-bool directory_exists(string path)
+bool directory_exists(std::string path)
 {
     if (!filter_path(path))
         return false;
@@ -20,7 +18,7 @@ bool directory_exists(string path)
     return false;
 }
 
-bool filter_path(string& path)
+bool filter_path(std::string& path)
 {
     if (path.length() == 0)
         return false;

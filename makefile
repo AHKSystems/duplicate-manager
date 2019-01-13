@@ -3,18 +3,18 @@ RM=rm -f
 CPPFLAGS=-std=c++17 -Iinclude
 LDFLAGS=
 
-OBJS=date.o fs.o output.o dupman.o
+OBJS=date.o fs.o output.o main.o
 SRC=source
 INC=include
 EXE=dupman.exe
 
 all: dupman
 
-dupman: dupman.o
+dupman: main.o
 	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS)
 
-dupman.o: $(SRC)/dupman.cpp output.o
-	$(CXX) -c $(CPPFLAGS) $(SRC)/dupman.cpp
+main.o: $(SRC)/main.cpp output.o
+	$(CXX) -c $(CPPFLAGS) $(SRC)/main.cpp
 
 output.o: $(SRC)/output.cpp $(INC)/output.h fs.o
 	$(CXX) -c $(CPPFLAGS) $(SRC)/output.cpp

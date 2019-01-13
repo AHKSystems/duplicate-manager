@@ -10,9 +10,6 @@ using std::ofstream;
 using std::ios;
 using std::string;
 
-using std::cout;
-using std::endl;
-
 unsigned int get_file_numlines(string& filename)
 {
     ifstream ifs(filename, ios::in);
@@ -44,10 +41,7 @@ int remove_files(string input_file, string output_file, bool generate_log)
     if (generate_log && directory_exists(output_file))
         writeOut = true;
     else if (generate_log && !directory_exists(output_file))
-    {
-        cout << "No se encontro el directorio del archivo de salida especificado" << endl;
-        return 15;
-    }
+        throw 15;
     else
         writeOut = false;
 
@@ -102,10 +96,7 @@ int write_batch_file(string input_file, string output_file)
 
     // Revisa si existe el directorio de salida
     if (!directory_exists(output_file))
-    {
-        cout << "No se encontro el directorio del archivo de salida especificado" << endl;
-        return 15;
-    }
+        throw 15;
 
     regCount = get_file_numlines(input_file);
 

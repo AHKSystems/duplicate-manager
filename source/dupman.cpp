@@ -50,9 +50,17 @@ int main(int argc, char** argv)
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&
                 strcmp(argv[3], "/b") == 0 && strlen(argv[4]) > 2)
             {
-                f_input.assign(argv[2]); f_batch.assign(argv[4]);
-                executionResult = write_batch_file(f_input, f_batch);
-                break;
+                try
+                {
+                    f_input.assign(argv[2]); f_batch.assign(argv[4]);
+                    executionResult = write_batch_file(f_input, f_batch);
+                    break;
+                }
+                catch (int e)
+                {
+                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    return e;
+                }
             }
 
         case 4:
@@ -64,9 +72,17 @@ int main(int argc, char** argv)
             if (strcmp(argv[1], "/i") == 0 && strlen(argv[2]) > 2 &&
                 strcmp(argv[3], "/d") == 0)
             {
-                f_input.assign(argv[2]);
-                executionResult = remove_files(f_input, "", false);
-                break;
+                try
+                {
+                    f_input.assign(argv[2]);
+                    executionResult = remove_files(f_input, "", false);
+                    break;
+                }
+                catch (int e)
+                {
+                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    return e;
+                }
             }
 
         case 6:
@@ -79,16 +95,24 @@ int main(int argc, char** argv)
                 strcmp(argv[3], "/d") == 0 &&
                 strcmp(argv[4], "/l") == 0 && strlen(argv[5]) > 2)
             {
-                f_input.assign(argv[2]); f_log.assign(argv[5]);
-                executionResult = remove_files(f_input, f_log, true);
-                break;
+                try
+                {
+                    f_input.assign(argv[2]); f_log.assign(argv[5]);
+                    executionResult = remove_files(f_input, f_log, true);
+                    break;
+                }
+                catch (int e)
+                {
+                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    return e;
+                }
             }
 
         default:
             cout << "Parametros incorrectos.\n" << endl;
             cout << "Sintaxis:" << endl;
-            cout << "  dupman /i input_file [/b batch_file | /d ";
-            cout << "[/l log_file]]" << endl;
+            cout << "  dupman /i input_file [ /b batch_file | /d ";
+            cout << "[ /l log_file ] ]" << endl;
 
             return 1;
     }

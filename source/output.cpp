@@ -13,10 +13,11 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-int get_lines(string, vector<string>&, vector<string>&);
-
 int remove_files(string input_file, string output_file, bool generate_log)
 {
+    const char* MSG_DELETED = "  Eliminado    -> ";
+    const char* MSG_NOT_DELETED = "  No eliminado -> ";
+
     bool writeOut;
 
     // Revisa si existe el directorio de salida
@@ -27,39 +28,41 @@ int remove_files(string input_file, string output_file, bool generate_log)
     else
         writeOut = false;
 
-    ofstream ofs;
-
     vector<string> segment_ids;
     vector<string> paths;
 
-    const char* MSG_DELETED = "  Eliminado    -> ";
-    const char* MSG_NOT_DELETED = "  No eliminado -> ";
+    int read_result = get_lines(input_file, paths, segment_ids);
 
-    if (writeOut)
-        oStream.open(output_file, ios::app);
+    if (read_result == 0)
+    {
+        ofstream ofs;
 
-    for (int i = 1; i < regCount; i++)
-        for (int j = i - 1; j < i; j++)
-            if (segment_ids[i] == segment_ids[j])
-            {
-                string bufferLog = get_datetime();
+        if (writeOut)
+            ofs.open(output_file, ios::app);
 
-                if (remove(paths[i].c_str()) == 0)
-                    bufferLog.append(MSG_DELETED);
-                else
-                    bufferLog.append(MSG_NOT_DELETED);
+        for (int i = 1; i < paths.size(); i++)
+            for (int j = i - 1; j < i; j++)
+                if (segment_ids[i] == segment_ids[j])
+                {
+                    string bufferLog = get_datetime();
 
-                bufferLog.append(paths[i]);
-                bufferLog.append("\n");
+                    if (remove(paths[i].c_str()) == 0)
+                        bufferLog.append(MSG_DELETED);
+                    else
+                        bufferLog.append(MSG_NOT_DELETED);
 
-                if (writeOut)
-                    oStream << bufferLog;
-            }
+                    bufferLog.append(paths[i]);
+                    bufferLog.append("\n");
 
-    if (writeOut)
-        oStream.close();
+                    if (writeOut)
+                        ofs << bufferLog;
+                }
 
-    return 0;
+        if (writeOut)
+            ofs.close();
+    }
+
+    return read_result;
 }
 
 int write_batch_file(string input_file, string output_file)

@@ -1,30 +1,32 @@
 CXX=g++
 RM=rm -f
-CPPFLAGS=-std=c++17
+CPPFLAGS=-std=c++17 -Iinclude
 LDFLAGS=
-LDLIBS=
 
 OBJS=date.o fs.o output.o dupman.o
+SRC=source
+INC=include
+EXE=dupman.exe
 
 all: dupman
 
 dupman: dupman.o
-	$(CXX) $(LDFLAGS) $(OBJS) -o dupman.exe
+	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS)
 
-dupman.o: dupman.cpp output.o
-	$(CXX) $(CPPFLAGS) -c dupman.cpp
+dupman.o: $(SRC)/dupman.cpp output.o
+	$(CXX) -c $(CPPFLAGS) $(SRC)/dupman.cpp
 
-output.o: output.cpp output.h fs.o
-	$(CXX) $(CPPFLAGS) -c output.cpp
+output.o: $(SRC)/output.cpp $(INC)/output.h fs.o
+	$(CXX) -c $(CPPFLAGS) $(SRC)/output.cpp
 
-fs.o: fs.cpp fs.h date.o
-	$(CXX) $(CPPFLAGS) -c fs.cpp
+fs.o: $(SRC)/fs.cpp $(INC)/fs.h date.o
+	$(CXX) -c $(CPPFLAGS) $(SRC)/fs.cpp
 
-date.o: date.cpp date.h
-	$(CXX) $(CPPFLAGS) -c date.cpp
+date.o: $(SRC)/date.cpp $(INC)/date.h
+	$(CXX) -c $(CPPFLAGS) $(SRC)/date.cpp
 
 clean:
 	$(RM) $(OBJS)
 
 distclean: clean
-	$(RM) dupman.exe
+	$(RM) $(EXE)

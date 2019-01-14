@@ -20,7 +20,7 @@ bool directory_exists(string path)
     if (path.length() == 0)
         return false;
 
-    filter_path(path, file_exists(path));
+    filter_path(path);
 
     DWORD dirAttr = GetFileAttributesA(path.c_str());
 
@@ -33,11 +33,7 @@ bool directory_exists(string path)
     return false;
 }
 
-void filter_path(string& path, bool from_file)
+void filter_path(string& path)
 {
-    size_t backslash = path.find_last_of('\\');
-
-    if (from_file == true ||
-        path.length() - 1 == backslash)
-        path = path.substr(0, backslash);
+    path = path.substr(0, path.find_last_of('\\'));
 }

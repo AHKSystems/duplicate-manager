@@ -13,13 +13,15 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-output::output(string input_file, string output_file)
+output::output(const char* input_file, const char* output_file)
 {
-    if (!file_exists(input_file)) throw 14;
-    if (!directory_exists(output_file)) throw 15;
+    string i_file(input_file), o_file(output_file);
 
-    this->input_file = input_file;
-    this->output_file = output_file;
+    if (!file_exists(i_file)) throw 14;
+    if (!directory_exists(o_file)) throw 15;
+
+    this->input_file = i_file;
+    this->output_file = o_file;
 }
 
 output::~output() { }

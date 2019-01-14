@@ -24,9 +24,7 @@ using std::endl;
  */
 int main(int argc, char** argv)
 {
-    int executionResult;
-
-    string f_input, f_batch, f_log;
+    int execution_result;
 
     // Selección de parámetros
     switch (argc)
@@ -53,13 +51,13 @@ int main(int argc, char** argv)
             {
                 try
                 {
-                    f_input.assign(argv[2]); f_batch.assign(argv[4]);
-                    executionResult = write_batch_file(f_input, f_batch);
+                    output o(argv[2], argv[4]);
+                    execution_result = o.write_batch_file();
                     break;
                 }
                 catch (int e)
                 {
-                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    cout << e << "\nNo se encontro el directorio del archivo de salida especificado." << endl;
                     return e;
                 }
             }
@@ -75,13 +73,13 @@ int main(int argc, char** argv)
             {
                 try
                 {
-                    f_input.assign(argv[2]);
-                    executionResult = remove_files(f_input, "", false);
+                    output o(argv[2], "");
+                    execution_result = o.remove_files(false);
                     break;
                 }
                 catch (int e)
                 {
-                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    cout << e << "\nNo se encontro el directorio del archivo de salida especificado." << endl;
                     return e;
                 }
             }
@@ -98,13 +96,13 @@ int main(int argc, char** argv)
             {
                 try
                 {
-                    f_input.assign(argv[2]); f_log.assign(argv[5]);
-                    executionResult = remove_files(f_input, f_log, true);
+                    output o(argv[2], argv[5]);
+                    execution_result = o.remove_files(true);
                     break;
                 }
                 catch (int e)
                 {
-                    cout << "No se encontro el directorio del archivo de salida especificado." << endl;
+                    cout << e << "\nNo se encontro el directorio del archivo de salida especificado." << endl;
                     return e;
                 }
             }

@@ -14,7 +14,7 @@ private:
     int get_lines();
 
 public:
-    output(std::string input_file, std::string output_file);
+    output(const char* input_file, const char* output_file);
     ~output();
     int write_batch_file();
     int remove_files(bool generate_log);

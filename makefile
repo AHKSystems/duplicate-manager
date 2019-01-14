@@ -1,6 +1,6 @@
 CXX=g++
 RM=rm -f
-CPPFLAGS=-std=c++17 -Iinclude
+CPPFLAGS=-std=c++17 -Wall -Iinclude
 LDFLAGS=
 
 OBJS=date.o fs.o output.o main.o

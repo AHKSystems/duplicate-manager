@@ -4,8 +4,6 @@ CPPFLAGS=-std=c++17 -Wall -Iinclude
 LDFLAGS=
 
 OBJS=date.o fs.o output.o main.o
-SRC=source
-INC=include
 EXE=dupman.exe
 
 all: dupman
@@ -13,17 +11,17 @@ all: dupman
 dupman: main.o
 	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS)
 
-main.o: $(SRC)/main.cpp output.o
-	$(CXX) -c $(CPPFLAGS) $(SRC)/main.cpp
+main.o: main.cpp output.o
+	$(CXX) -c $(CPPFLAGS) main.cpp
 
-output.o: $(SRC)/output.cpp $(INC)/output.h fs.o
-	$(CXX) -c $(CPPFLAGS) $(SRC)/output.cpp
+output.o: source/output.cpp include/output.h fs.o
+	$(CXX) -c $(CPPFLAGS) source/output.cpp
 
-fs.o: $(SRC)/fs.cpp $(INC)/fs.h date.o
-	$(CXX) -c $(CPPFLAGS) $(SRC)/fs.cpp
+fs.o: source/fs.cpp include/fs.h date.o
+	$(CXX) -c $(CPPFLAGS) source/fs.cpp
 
-date.o: $(SRC)/date.cpp $(INC)/date.h
-	$(CXX) -c $(CPPFLAGS) $(SRC)/date.cpp
+date.o: source/date.cpp include/date.h
+	$(CXX) -c $(CPPFLAGS) source/date.cpp
 
 clean:
 	$(RM) $(OBJS)
